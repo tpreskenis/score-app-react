@@ -1,13 +1,17 @@
 import React from 'react';
-import { loadCSS } from 'fg-loadcss';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
 
-const useStyles = makeStyles((theme) => ({
+import * as Actions from "../actions/Actions"
+import FluxStore from "../stores/Store"
+
+const styles = ({
   root: {
     flexGrow: 1,
   },
@@ -16,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
       placeContent: 'center'
   },
   menuButton: {
-    marginRight: theme.spacing(2),
     color: 'black'
   },
   title: {
@@ -27,28 +30,75 @@ const useStyles = makeStyles((theme) => ({
   spacer: {
     width: '180px'
   }
-}));
+});
 
-function testingButton() {
-    return console.log("test");
+function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
 }
 
-export default function ButtonAppBar() {
-  const classes = useStyles();
+class Topbar extends React.Component {
+  constructor() {
+      super();
+      this.state = {
+        reload: {
+          open: false,
+          transition: 'SlideTransition'
+        },
+        local: FluxStore.getLocal(),
+        tab: FluxStore.getTab(),
+        message: 'null'
+    }
+
+    this.reload = this.reload.bind(this);
+    this.close = this.close.bind(this);
+  }
+
+  componentDidMount() {
+    FluxStore.on("change", () => {
+        this.setState({
+            local:FluxStore.getLocal(),
+            tab: FluxStore.getTab(),
+        })
+    })
+  }
+
+  refreshButton() {
+    console.log(this.state.tab)
+    if(this.state.local) {
+      Actions.flux("LOCAL_SELECTED")
+      Actions.flux("CREATE_LOCAL")
+      this.setState({
+        message: 'Refreshing Games'
+      })    }
+    else {
+      this.setState({
+        message: 'Please select local file or download the Score API'
+      })
+    }
+    return
+  }
 
 
-  React.useEffect(() => {
-    const node = loadCSS(
-      'https://use.fontawesome.com/releases/v5.12.0/css/all.css',
-      document.querySelector('#font-awesome-css'),
-    );
+  reload() {
+    this.setState(prevState => {
+      let reload = Object.assign({}, prevState.reload);  
+      reload.open = true;                           
+      return { reload };                                 
+    })
+  }
+  close() {
+    this.setState(prevState => {
+      let reload = Object.assign({}, prevState.reload);  
+      reload.open = false;                           
+      return { reload };                                 
+    })  
+  }
 
-    return () => {
-      node.parentNode.removeChild(node);
-    };
-  }, []);
+  render() {
 
-  return (
+    const { classes } = this.props;
+
+    return (
     <div className={classes.root}>
       <AppBar position="static" >
         <Toolbar className={classes.appBar}>
@@ -56,11 +106,18 @@ export default function ButtonAppBar() {
                 Scores
             </Typography>
             <div className={classes.spacer}/>
-          <IconButton onClick={() => { testingButton() }} edge="start" className={classes.menuButton} aria-label="menu">
+          <IconButton onClick={() => { this.refreshButton(); this.reload();}} edge="start" className={classes.menuButton} aria-label="menu">
             <Icon className="fas fa-sync-alt" />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <Snackbar
+        open={this.state.reload.open}
+        onClose={this.close}
+        TransitionComponent={SlideTransition}
+        message={this.state.message} />
     </div>
   );
 }
+}
+export default withStyles(styles)(Topbar);

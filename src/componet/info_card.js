@@ -39,34 +39,39 @@ const styles = ({
 
 
 
-class Scorecard extends React.Component {
+class InfoCard extends React.Component {
     constructor() {
         super();
         this.state = {
-            todos: FluxStore.getAll(),
             makeDisplay: false,
             makeVisible: false,
         }
     }
     componentDidMount() {
-        FluxStore.on("change", () => {
-            this.setState({
-                todos:FluxStore.getAll,
-                refreshed: FluxStore.getLocalSelected
-            })          
-            if(FluxStore.getLocalSelected()) {
-              setTimeout(() => {
-                this.setState({
-                  makeDisplay: true
-                });
+        FluxStore.on("change", () => {      
+            if((FluxStore.getTab() === 'INFO')) {
                 setTimeout(() => {
                   this.setState({
-                    makeVisible: true
+                    makeDisplay: true
                   });
-                  
-                }, 100);
-              }, 300);
-            }
+                  setTimeout(() => {
+                    this.setState({
+                      makeVisible: true
+                    });
+                    
+                  }, 100);
+                }, 300);
+              }
+              if ((FluxStore.getTab() === 'BASEBALL' || FluxStore.getTab() === 'BASKETBALL') && this.state.makeDisplay) {
+                  this.setState({
+                    makeVisible: false
+                  });
+                  setTimeout(() => {
+                    this.setState({
+                        makeDisplay: false
+                    })
+                  }, 300);
+              }
         })
     }
 
@@ -102,4 +107,4 @@ class Scorecard extends React.Component {
   );
 }
 }
-export default withStyles(styles)(Scorecard);
+export default withStyles(styles)(InfoCard);
