@@ -6,14 +6,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import * as Actions from "../actions/Actions"
-import FluxStore from "../stores/Store"
+import * as Actions from "../../actions/Actions";
+import FluxStore from "../../stores/Store";
 
 const styles = ({
   root: {
     marginTop: 15,
     minWidth: 275,
-    display: 'none'
   },
   bullet: {
     display: 'inline-block',
@@ -80,19 +79,14 @@ class Scorecard extends React.Component {
   const { classes } = this.props;
 
   return (
-    <Card className={`${classes.root} ${this.state.makeDisplay ? classes.display: null} ${this.state.makeVisible ? classes.visible: null}`}>
+    <Card className={`${classes.root}`}>
       <CardContent>
           <Button variant="contained" color="primary" disableElevation onClick={this.createTodo.bind(this)}>Testing</Button>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           {FluxStore.getAll()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+          BASKETBALL
         </Typography>
       </CardContent>
       <CardActions>

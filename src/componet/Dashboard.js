@@ -2,12 +2,14 @@ import React from 'react';
 import TopBar from './TopBar.js'
 import BottomBar from './BottomBar.js'
 import ApiCard from './api_card.js'
-import InfoTemplate from './information/info_template.js'
-import PlayerCard from './playerCard.js'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { loadCSS } from 'fg-loadcss';
 
+// Templates
+import InfoTemplate from './information/info_template.js'
+import BasketTemplate from './basketball/basket_template.js'
+import BaseTemplate from './baseball/base_template.js'
 
 function Dashboard() {
   React.useEffect(() => {
@@ -29,7 +31,8 @@ function Dashboard() {
             <Container maxWidth="sm">
                 <ApiCard/>
                 <InfoTemplate/>
-                <PlayerCard/>
+                <BasketTemplate/>
+                <BaseTemplate/>
             </Container>
       </React.Fragment>
       <BottomBar/>

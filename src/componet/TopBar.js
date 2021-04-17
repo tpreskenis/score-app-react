@@ -10,6 +10,7 @@ import Slide from '@material-ui/core/Slide';
 
 import * as Actions from "../actions/Actions"
 import FluxStore from "../stores/Store"
+import { orange } from '@material-ui/core/colors';
 
 const styles = ({
   root: {
@@ -20,7 +21,13 @@ const styles = ({
       placeContent: 'center'
   },
   menuButton: {
-    color: 'black'
+    transition: 'all 0.3s ease',
+  },
+  basketballButton: {
+    color: 'orange'
+  },
+  baseballButton: {
+    color: 'crimson'
   },
   title: {
     color: 'black',
@@ -29,6 +36,10 @@ const styles = ({
   },
   spacer: {
     width: '180px'
+  },
+  disapear: {
+    opacity: 0,
+    pointerEvents: 'none'
   }
 });
 
@@ -46,7 +57,10 @@ class Topbar extends React.Component {
         },
         local: FluxStore.getLocal(),
         tab: FluxStore.getTab(),
-        message: 'null'
+        message: 'null',
+        disabled: false,
+        baseball: false,
+        basketball: true,
     }
 
     this.reload = this.reload.bind(this);
@@ -59,6 +73,25 @@ class Topbar extends React.Component {
             local:FluxStore.getLocal(),
             tab: FluxStore.getTab(),
         })
+        if(FluxStore.getTab() === 'BASKETBALL') {
+          this.setState({
+            disabled: false,
+            basketball: true,
+            baseball: false
+        })
+        }
+        if(FluxStore.getTab() === 'BASEBALL') {
+          this.setState({
+            disabled: false,
+            basketball: false,
+            baseball: true
+        })
+        }
+        if(FluxStore.getTab() === 'INFO') {
+          this.setState({
+            disabled: true,
+        })
+        }
     })
   }
 
@@ -103,10 +136,10 @@ class Topbar extends React.Component {
       <AppBar position="static" >
         <Toolbar className={classes.appBar}>
             <Typography variant="h6" className={classes.title}>
-                Scores
+                React Score App
             </Typography>
             <div className={classes.spacer}/>
-          <IconButton onClick={() => { this.refreshButton(); this.reload();}} edge="start" className={classes.menuButton} aria-label="menu">
+          <IconButton onClick={() => { this.refreshButton(); this.reload();}} edge="start" className={`${classes.menuButton} ${this.state.disabled ? classes.disapear: null} ${this.state.basketball ? classes.basketballButton: null} ${this.state.baseball ? classes.baseballButton: null}`} aria-label="menu">
             <Icon className="fas fa-sync-alt" />
           </IconButton>
         </Toolbar>
