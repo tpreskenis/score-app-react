@@ -2,7 +2,7 @@ import React from 'react';
 import TopBar from './TopBar.js'
 import BottomBar from './BottomBar.js'
 import ApiCard from './api_card.js'
-import InfoCard from './info_card.js'
+import InfoTemplate from './information/info_template.js'
 import PlayerCard from './playerCard.js'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -28,7 +28,7 @@ function Dashboard() {
         <CssBaseline />
             <Container maxWidth="sm">
                 <ApiCard/>
-                <InfoCard/>
+                <InfoTemplate/>
                 <PlayerCard/>
             </Container>
       </React.Fragment>
