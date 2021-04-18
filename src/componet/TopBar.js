@@ -10,7 +10,6 @@ import Slide from '@material-ui/core/Slide';
 
 import * as Actions from "../actions/Actions"
 import FluxStore from "../stores/Store"
-import { orange } from '@material-ui/core/colors';
 
 const styles = ({
   root: {

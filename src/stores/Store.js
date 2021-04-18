@@ -21,6 +21,19 @@ class FluxStore extends EventEmitter {
         this.emit("change")
     }
 
+    getMLBDataHost() {
+        fetch("http://localhost:3000/mlb_game", {
+            method: 'GET',
+          })
+            .then(async response => {
+              const data = await response.json();
+              console.log(data)
+            })
+            .catch(error => {
+              console.error("There was an error, auto connection failed!", error);
+            });
+          }
+
     getMLBData() {
         return this.mlbData
     }
@@ -69,6 +82,7 @@ class FluxStore extends EventEmitter {
             case "BASEBALL":
                 this.tab = 'BASEBALL'
                 console.log(1)
+                this.getMLBDataHost()
                 this.emit("change")
             break;
             case "INFO":

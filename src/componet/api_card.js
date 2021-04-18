@@ -22,9 +22,16 @@ const styles = ({
   infoGit: {
     fontSize: 18,
   },
+  smallinfoGit: {
+    fontSize: 12,
+    marginBottom: '15px',
+  },
   selectDocument: {
     backgroundColor: 'rgb(0, 165, 14)',
     color: 'white !important',
+  },
+  hover: {
+    color: 'rgb(0, 165, 14) !important',
   },
   pos: {
     marginBottom: 12,
@@ -54,8 +61,13 @@ class Scorecard extends React.Component {
         this.state = {
             tab: FluxStore.getTab(),
             active: false,
+            hoverLocal: true,
+            hoverBackground: false,
             turnInvisible: false,
             removeDisplay: false,
+            activeApi: false,
+            hoverApi: true,
+            hoverBackgroundApi: false,
         }
     }
     componentDidMount() {
@@ -100,6 +112,9 @@ class Scorecard extends React.Component {
     toggleClass() {
       const currentState = this.state.active
       this.setState({ active: !currentState})
+      if (this.state.activeApi === true) {
+        this.setState({ activeApi: currentState})
+      }
       if (currentState) {
         Actions.flux("TOGGLE_LOCAL_OFF")
       }
@@ -107,10 +122,37 @@ class Scorecard extends React.Component {
         Actions.flux("TOGGLE_LOCAL_ON")
       }
     }
-
-    createTodo() {
-        this.toggleClass();
+    toggleHoverLocal() {
+      const currentState = this.state.hoverLocal
+      this.setState({hoverLocal: !currentState})
+      if (this.state.hoverLocal && this.state.active) {
+        this.setState({ hoverBackground: true})
+      }
+      else {
+        this.setState({ hoverBackground: false})
+      }
     }
+
+    toggleHoverApi() {
+      const currentState = this.state.hoverApi
+      this.setState({hoverApi: !currentState})
+      if (this.state.hoverApi && this.state.activeApi) {
+        console.log('test')
+        this.setState({ hoverBackgroundApi: true})
+      }
+      else {
+        this.setState({ hoverBackgroundApi: false})
+      }
+    }
+
+    toggleApiClass() {
+      const currentState = this.state.activeApi
+      this.setState({ activeApi: !currentState})
+      if (this.state.active === true) {
+        this.setState({ active: currentState})
+      }
+    }
+
     githubLink(){
       const url = 'https://github.com/tpreskenis/score-api';
       window.open(url, '_blank');
@@ -124,11 +166,27 @@ class Scorecard extends React.Component {
   return (
     <Card id='api_card' className={`${classes.root} ${this.state.turnInvisible ? classes.invisible: null} ${this.state.removeDisplay ? classes.noDisplay: null}`}>
       <CardContent className={classes.cardContent}>
-        <IconButton className={`${classes.iconButtons} ${this.state.active ? classes.selectDocument: null}`} color="primary" size='medium' aria-label="run localy" onClick={this.createTodo.bind(this)}>
+        <IconButton className={`${classes.iconButtons} ${this.state.active ? classes.selectDocument: null} ${this.state.hoverBackground ? classes.hover: null}`} onMouseEnter={this.toggleHoverLocal.bind(this)} onMouseLeave={this.toggleHoverLocal.bind(this)} color="primary" size='medium' aria-label="run localy" onClick={this.toggleClass.bind(this)}>
           <Icon fontSize="large" className="fas fa-file-code" />
         </IconButton>   
         <Typography className={classes.infoGit} gutterBottom>
-          Read from local json files.  Once clicked, press the refresh button above. (Built-in)
+          Read from local json files
+        </Typography>
+        <Typography className={classes.smallinfoGit} gutterBottom>
+          Once clicked, press the refresh button above. (Built-in)
+        </Typography>
+        <div>
+          <Divider variant="middle" />
+        </div>
+
+        <IconButton className={`${classes.iconButtons} ${this.state.activeApi ? classes.selectDocument: null} ${this.state.hoverBackgroundApi ? classes.hover: null}`} onMouseEnter={this.toggleHoverApi.bind(this)} onMouseLeave={this.toggleHoverApi.bind(this)} color="primary" onClick={this.toggleApiClass.bind(this)}>
+          <Icon fontSize="large" className="fas fa-stream" />
+        </IconButton>          
+        <Typography className={classes.infoGit} gutterBottom>
+          Use API
+        </Typography>
+        <Typography className={classes.smallinfoGit} gutterBottom>
+          Once API is running, click press the refresh button above.
         </Typography>
         <div>
           <Divider variant="middle" />
@@ -137,7 +195,11 @@ class Scorecard extends React.Component {
           <Icon fontSize="large" className="fab fa-github" />
         </IconButton>          
         <Typography className={classes.infoGit} gutterBottom>
-          Run API - Download from Github/Run and refresh.  (Please note you will have to request access).
+          GitHub
+        </Typography>
+        <Typography className={classes.smallinfoGit} gutterBottom>
+          API location in GitHub <br/>
+          (Please note you will have to request access)
         </Typography>
       </CardContent>
     </Card>
