@@ -54,8 +54,9 @@ class Topbar extends React.Component {
           open: false,
           transition: 'SlideTransition'
         },
-        local: FluxStore.getLocal(),
+        api:FluxStore.getAPI(),
         tab: FluxStore.getTab(),
+        local:FluxStore.getLocal(),
         message: 'null',
         disabled: false,
         baseball: false,
@@ -70,6 +71,7 @@ class Topbar extends React.Component {
     FluxStore.on("change", () => {
         this.setState({
             local:FluxStore.getLocal(),
+            api:FluxStore.getAPI(),
             tab: FluxStore.getTab(),
         })
         if(FluxStore.getTab() === 'BASKETBALL') {
@@ -97,10 +99,16 @@ class Topbar extends React.Component {
   refreshButton() {
     console.log(this.state.tab)
     if(this.state.local) {
-      Actions.flux("LOCAL_SELECTED")
+      Actions.flux("SELECTED")
       Actions.flux("CREATE_LOCAL")
       this.setState({
-        message: 'Refreshing Games'
+        message: 'Refreshing Games (Local)'
+      })    }
+    else if (this.state.api) {
+      Actions.flux("SELECTED")
+      Actions.flux("CREATE_API")
+      this.setState({
+        message: 'Refreshing Games (API)'
       })    }
     else {
       this.setState({

@@ -32,7 +32,7 @@ class BaseTemplate extends React.Component {
     }
     componentDidMount() {
         FluxStore.on("change", () => {      
-            if((FluxStore.getTab() === 'BASEBALL') && FluxStore.getLocalSelected()) {
+            if((FluxStore.getTab() === 'BASEBALL') && FluxStore.getSelected()) {
                 setTimeout(() => {
                   this.setState({
                     makeDisplay: true

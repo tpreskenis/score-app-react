@@ -42,7 +42,6 @@ class Scorecard extends React.Component {
     constructor() {
         super();
         this.state = {
-            todos: FluxStore.getAll(),
             makeDisplay: false,
             makeVisible: false,
         }
@@ -50,10 +49,9 @@ class Scorecard extends React.Component {
     componentDidMount() {
         FluxStore.on("change", () => {
             this.setState({
-                todos:FluxStore.getAll,
-                refreshed: FluxStore.getLocalSelected
+                refreshed: FluxStore.getSelected
             })          
-            if(FluxStore.getLocalSelected()) {
+            if(FluxStore.getSelected()) {
               setTimeout(() => {
                 this.setState({
                   makeDisplay: true
@@ -83,7 +81,6 @@ class Scorecard extends React.Component {
       <CardContent>
           <Button variant="contained" color="primary" disableElevation onClick={this.createTodo.bind(this)}>Testing</Button>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          {FluxStore.getAll()}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
           BASKETBALL

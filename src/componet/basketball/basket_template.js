@@ -32,7 +32,7 @@ class BasketTemplate extends React.Component {
     }
     componentDidMount() {
         FluxStore.on("change", () => {      
-            if((FluxStore.getTab() === 'BASKETBALL') && FluxStore.getLocalSelected()) {
+            if((FluxStore.getTab() === 'BASKETBALL') && FluxStore.getSelected()) {
                 setTimeout(() => {
                   this.setState({
                     makeDisplay: true

@@ -75,7 +75,7 @@ class Scorecard extends React.Component {
             this.setState({
                 tab:FluxStore.getTab(),
             })
-          if(FluxStore.getLocalSelected()) {
+          if(FluxStore.getSelected()) {
             this.setState({
               turnInvisible: true
             })
@@ -120,6 +120,7 @@ class Scorecard extends React.Component {
       }
       else {
         Actions.flux("TOGGLE_LOCAL_ON")
+        Actions.flux("TOGGLE_API_OFF")
       }
     }
     toggleHoverLocal() {
@@ -150,6 +151,13 @@ class Scorecard extends React.Component {
       this.setState({ activeApi: !currentState})
       if (this.state.active === true) {
         this.setState({ active: currentState})
+      }
+      if (currentState) {
+        Actions.flux("TOGGLE_API_OFF")
+      }
+      else {
+        Actions.flux("TOGGLE_LOCAL_OFF")
+        Actions.flux("TOGGLE_API_ON")
       }
     }
 

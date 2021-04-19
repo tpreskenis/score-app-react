@@ -4,30 +4,24 @@ import dispatcher from "../dispatcher";
 class FluxStore extends EventEmitter {
     constructor() {
         super()
-        this.todos = 'Yolo'
         this.mlbData = 'Null'
         this.local = false
-        this.local_selected = false
+        this.api = false
+        this.selected = false
         this.tab = 'BASKETBALL'
     }
 
-    getLocalJson() {
-        this.mlb_json = require('../assets/mlb.json')
-        this.emit("change")
+    // MLB Data
+    MLBLocalData() {
+        this.mlbData = require('../assets/mlb.json')
     }
-
-    createTodo() {
-        this.todos = this.mlb_json.league;
-        this.emit("change")
-    }
-
-    getMLBDataHost() {
+    MLBAPIData() {
         fetch("http://localhost:3000/mlb_game", {
             method: 'GET',
           })
             .then(async response => {
               const data = await response.json();
-              console.log(data)
+              this.mlbData = data
             })
             .catch(error => {
               console.error("There was an error, auto connection failed!", error);
@@ -38,16 +32,20 @@ class FluxStore extends EventEmitter {
         return this.mlbData
     }
 
-    getAll() {
-        return this.todos;
-    }
 
     getLocal() {
         return this.local
     }
-    getLocalSelected() {
-        return this.local_selected
+    getAPI() {
+        return this.api
     }
+    getSelected() {
+        return this.selected
+    }
+
+
+
+
 
     // Bottom Bar
     getTab() {
@@ -57,9 +55,23 @@ class FluxStore extends EventEmitter {
     handleActions(action) {
         switch(action.text) {
             case "CREATE_LOCAL":
-                this.getLocalJson()
-                console.log(this.mlb_json)
-                this.createTodo()
+                this.MLBLocalData()
+                console.log('LOCAL')
+                this.emit("change")
+            break;
+            case "CREATE_API":
+                this.MLBAPIData()
+                console.log('API')
+                this.emit("change")
+            break;
+            // API OR LOCAL
+            case "TOGGLE_API_ON":
+                this.api = true
+                this.emit("change")
+            break;
+            case "TOGGLE_API_OFF":
+                this.api = false
+                this.emit("change")
             break;
             case "TOGGLE_LOCAL_ON":
                 this.local = true
@@ -69,8 +81,8 @@ class FluxStore extends EventEmitter {
                 this.local = false
                 this.emit("change")
             break;
-            case "LOCAL_SELECTED":
-                this.local_selected = true
+            case "SELECTED":
+                this.selected = true
                 this.emit("change")
             break;
             // Bottom Selection
@@ -82,7 +94,6 @@ class FluxStore extends EventEmitter {
             case "BASEBALL":
                 this.tab = 'BASEBALL'
                 console.log(1)
-                this.getMLBDataHost()
                 this.emit("change")
             break;
             case "INFO":
