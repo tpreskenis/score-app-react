@@ -6,7 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import * as Actions from "../../actions/Actions";
 import FluxStore from "../../stores/Store";
 
 const styles = ({
@@ -68,7 +67,7 @@ class Scorecard extends React.Component {
     }
 
     createTodo() {
-      Actions.flux("CREATE_TODO")
+      console.log(FluxStore.getNBAData())
     }
 
 

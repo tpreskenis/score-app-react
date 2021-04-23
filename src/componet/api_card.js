@@ -138,7 +138,6 @@ class Scorecard extends React.Component {
       const currentState = this.state.hoverApi
       this.setState({hoverApi: !currentState})
       if (this.state.hoverApi && this.state.activeApi) {
-        console.log('test')
         this.setState({ hoverBackgroundApi: true})
       }
       else {
@@ -158,6 +157,7 @@ class Scorecard extends React.Component {
       else {
         Actions.flux("TOGGLE_LOCAL_OFF")
         Actions.flux("TOGGLE_API_ON")
+        Actions.flux("CREATE_API")
       }
     }
 

@@ -105,11 +105,18 @@ class Topbar extends React.Component {
         message: 'Refreshing Games (Local)'
       })    }
     else if (this.state.api) {
-      Actions.flux("SELECTED")
-      Actions.flux("CREATE_API")
-      this.setState({
-        message: 'Refreshing Games (API)'
-      })    }
+      if(FluxStore.getOnline()) {
+        Actions.flux("SELECTED")
+        this.setState({
+          message: 'Refreshing Games API'
+        })
+      }
+      else if (!FluxStore.getOnline()) {
+        this.setState({
+          message: 'API can not be reached'
+        })
+      }
+    }
     else {
       this.setState({
         message: 'Please select local file or download the Score API'
@@ -154,6 +161,7 @@ class Topbar extends React.Component {
       <Snackbar
         open={this.state.reload.open}
         onClose={this.close}
+        autoHideDuration={1000}
         TransitionComponent={SlideTransition}
         message={this.state.message} />
     </div>

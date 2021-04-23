@@ -5,8 +5,10 @@ class FluxStore extends EventEmitter {
     constructor() {
         super()
         this.mlbData = 'Null'
+        this.nbaData = 'Null'
         this.local = false
         this.api = false
+        this.api_online = false 
         this.selected = false
         this.tab = 'BASKETBALL'
     }
@@ -21,15 +23,44 @@ class FluxStore extends EventEmitter {
           })
             .then(async response => {
               const data = await response.json();
-              this.mlbData = data
+              this.mlbData = data[0]
+              this.api_online = true
             })
             .catch(error => {
+              this.api_online = false
               console.error("There was an error, auto connection failed!", error);
             });
           }
 
     getMLBData() {
         return this.mlbData
+    }
+
+    // NBA Data
+    NBALocalData() {
+        this.nbaData = require('../assets/nba.json')
+    }
+    NBAAPIData() {
+        fetch("http://localhost:3000/nba_game", {
+            method: 'GET',
+          })
+            .then(async response => {
+              const data = await response.json();
+              this.nbaData = data[0]
+              this.api_online = true
+            })
+            .catch(error => {
+              this.api_online = false
+              console.error("There was an error, auto connection failed!", error);
+            });
+          }
+
+    getNBAData() {
+        return this.nbaData
+    }
+
+    getOnline() {
+        return this.api_online
     }
 
 
@@ -56,12 +87,12 @@ class FluxStore extends EventEmitter {
         switch(action.text) {
             case "CREATE_LOCAL":
                 this.MLBLocalData()
-                console.log('LOCAL')
+                this.NBALocalData()
                 this.emit("change")
             break;
             case "CREATE_API":
                 this.MLBAPIData()
-                console.log('API')
+                this.NBAAPIData()
                 this.emit("change")
             break;
             // API OR LOCAL
