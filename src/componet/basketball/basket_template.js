@@ -2,6 +2,7 @@ import React from 'react';
 import { withStyles  } from '@material-ui/core/styles';
 
 import ScoreCard from './basket_score'
+import Stadium from './basket_stadium'
 
 import FluxStore from "../../stores/Store"
 
@@ -65,6 +66,7 @@ class BasketTemplate extends React.Component {
   return (
     <div className={`${classes.root} ${this.state.makeDisplay ? classes.display: null} ${this.state.makeVisible ? classes.visible: null}`}>
       <ScoreCard/>
+      <Stadium/>
     </div>
   );
 }

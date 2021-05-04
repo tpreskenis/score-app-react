@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles  } from '@material-ui/core/styles';
 
 import ScoreCard from './base_score'
-
+import Stadium from './base_stadium'
+ 
 import FluxStore from "../../stores/Store"
 
 const styles = ({
@@ -65,6 +66,7 @@ class BaseTemplate extends React.Component {
   return (
     <div className={`${classes.root} ${this.state.makeDisplay ? classes.display: null} ${this.state.makeVisible ? classes.visible: null}`}>
       <ScoreCard/>
+      <Stadium/>
     </div>
   );
 }
