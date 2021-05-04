@@ -3,7 +3,6 @@ import { withStyles  } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -156,19 +155,22 @@ class Scorecard extends React.Component {
     componentDidMount() {
         FluxStore.on("change", () => {
             this.setState({
+                // In case we need call backs
                 refreshed: FluxStore.getSelected(),
                 mlbData: FluxStore.getMLBData()
-            })    
+            })
+            
+            const mlbDataOverall = FluxStore.getMLBData()
 
-            if (this.state.mlbData !== 'Null') {
-              const datahome = this.state.mlbData.home_period_scores.reduce((a, b) => {
+            if (mlbDataOverall !== 'Null') {
+              const datahome = mlbDataOverall.home_period_scores.reduce((a, b) => {
                 return a + b;
               });   
-              const dataaway = this.state.mlbData.away_period_scores.reduce((a, b) => {
+              const dataaway = mlbDataOverall.away_period_scores.reduce((a, b) => {
                 return a + b;
               });     
               // Sets Winner
-              if (this.state.mlbData.event_information.status === 'completed') {
+              if (mlbDataOverall.event_information.status === 'completed') {
                 if (datahome > dataaway) {
                   this.setState({ winHome: true })  
                   }
@@ -181,8 +183,8 @@ class Scorecard extends React.Component {
               }
               // Set Teamname 
               this.setState({
-                home: this.state.mlbData.home_team.abbreviation,
-                away: this.state.mlbData.away_team.abbreviation,
+                home: mlbDataOverall.home_team.abbreviation,
+                away: mlbDataOverall.away_team.abbreviation,
               })    
               // Sets Score (Overall)
               this.setState({
@@ -191,33 +193,33 @@ class Scorecard extends React.Component {
               })    
               // Sets Score (Inning)
               this.setState({
-                scoreHome1: this.state.mlbData.home_period_scores[0],
-                scoreHome2: this.state.mlbData.home_period_scores[1],
-                scoreHome3: this.state.mlbData.home_period_scores[2],
-                scoreHome4: this.state.mlbData.home_period_scores[3],
-                scoreHome5: this.state.mlbData.home_period_scores[4],
-                scoreHome6: this.state.mlbData.home_period_scores[5],
-                scoreHome7: this.state.mlbData.home_period_scores[6],
-                scoreHome8: this.state.mlbData.home_period_scores[7],
-                scoreHome9: this.state.mlbData.home_period_scores[8],
-                scoreAway1: this.state.mlbData.away_period_scores[0],
-                scoreAway2: this.state.mlbData.away_period_scores[1],
-                scoreAway3: this.state.mlbData.away_period_scores[2],
-                scoreAway4: this.state.mlbData.away_period_scores[3],
-                scoreAway5: this.state.mlbData.away_period_scores[4],
-                scoreAway6: this.state.mlbData.away_period_scores[5],
-                scoreAway7: this.state.mlbData.away_period_scores[6],
-                scoreAway8: this.state.mlbData.away_period_scores[7],
-                scoreAway9: this.state.mlbData.away_period_scores[8],
+                scoreHome1: mlbDataOverall.home_period_scores[0],
+                scoreHome2: mlbDataOverall.home_period_scores[1],
+                scoreHome3: mlbDataOverall.home_period_scores[2],
+                scoreHome4: mlbDataOverall.home_period_scores[3],
+                scoreHome5: mlbDataOverall.home_period_scores[4],
+                scoreHome6: mlbDataOverall.home_period_scores[5],
+                scoreHome7: mlbDataOverall.home_period_scores[6],
+                scoreHome8: mlbDataOverall.home_period_scores[7],
+                scoreHome9: mlbDataOverall.home_period_scores[8],
+                scoreAway1: mlbDataOverall.away_period_scores[0],
+                scoreAway2: mlbDataOverall.away_period_scores[1],
+                scoreAway3: mlbDataOverall.away_period_scores[2],
+                scoreAway4: mlbDataOverall.away_period_scores[3],
+                scoreAway5: mlbDataOverall.away_period_scores[4],
+                scoreAway6: mlbDataOverall.away_period_scores[5],
+                scoreAway7: mlbDataOverall.away_period_scores[6],
+                scoreAway8: mlbDataOverall.away_period_scores[7],
+                scoreAway9: mlbDataOverall.away_period_scores[8],
               })
               // Set Hits, Errors, & Runs   
               this.setState({
-                homeTotalRuns: this.state.mlbData.home_batter_totals.runs,
-                homeTotalHits: this.state.mlbData.home_batter_totals.hits,
-                homeTotalErrors: this.state.mlbData.home_errors,
-                awayTotalRuns: this.state.mlbData.away_batter_totals.runs,
-                awayTotalHits: this.state.mlbData.away_batter_totals.hits,
-                awayTotalErrors: this.state.mlbData.away_errors,
+                homeTotalRuns: mlbDataOverall.home_batter_totals.runs,
+                homeTotalHits: mlbDataOverall.home_batter_totals.hits,
+                homeTotalErrors: mlbDataOverall.home_errors,
+                awayTotalRuns: mlbDataOverall.away_batter_totals.runs,
+                awayTotalHits: mlbDataOverall.away_batter_totals.hits,
+                awayTotalErrors: mlbDataOverall.away_errors,
               })     
             }
             
@@ -244,11 +246,6 @@ class Scorecard extends React.Component {
       })
     }
 
-    createTodo() {
-      console.log(FluxStore.getMLBData())
-    }
-
-
   render() {
 
   const { classes } = this.props;
@@ -270,9 +267,6 @@ class Scorecard extends React.Component {
             {this.state.scoreAway}
           </Typography>
         </div>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-            <Button variant="contained" color="primary" disableElevation onClick={this.createTodo.bind(this)}>Testing</Button>
-          </Typography>
       </CardContent>
       <div className={`${classes.centerButton}`}>
       <CardActions disableSpacing className={classes.expandButton}>
