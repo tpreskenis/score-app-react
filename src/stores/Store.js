@@ -18,7 +18,7 @@ class FluxStore extends EventEmitter {
         this.mlbData = require('../assets/mlb.json')
     }
     MLBAPIData() {
-        fetch("http://localhost:3000/mlb_game", {
+        fetch("http://localhost:3001/mlb_game", {
             method: 'GET',
           })
             .then(async response => {
@@ -41,7 +41,7 @@ class FluxStore extends EventEmitter {
         this.nbaData = require('../assets/nba.json')
     }
     NBAAPIData() {
-        fetch("http://localhost:3000/nba_game", {
+        fetch("http://localhost:3001/nba_game", {
             method: 'GET',
           })
             .then(async response => {

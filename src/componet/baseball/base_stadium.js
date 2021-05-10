@@ -74,7 +74,6 @@ const styles = ({
     color: 'gray'
   },
   misc_row: {
-    paddingTop: '15px',
     alignItems: 'center',
     display: 'flex',
     flex: '1 1 100%',
