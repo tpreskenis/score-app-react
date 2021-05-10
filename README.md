@@ -9,9 +9,10 @@ The follwing is a front end application built off of React.  It uses a score api
 
 <p></p>
 <div align="center">
-Live at:
-</div>
 
+Live at: [Here](https://lemon-stone-0b06d0b0f.azurestaticapps.net/)
+
+</div>
 
 ---
 
